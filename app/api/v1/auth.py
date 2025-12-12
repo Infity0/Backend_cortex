@@ -15,7 +15,6 @@ async def register(
     request: RegisterRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Register a new user"""
     service = AuthService(db)
     result = await service.register_user(
         email=request.email,
@@ -30,7 +29,6 @@ async def login(
     request: LoginRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Login user and return JWT tokens"""
     service = AuthService(db)
     tokens = await service.login_user(
         email=request.email,
@@ -44,7 +42,6 @@ async def verify_email(
     request: VerifyEmailRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Verify user email with code"""
     service = AuthService(db)
     result = await service.verify_email(code=request.code)
     return result
@@ -55,7 +52,6 @@ async def forgot_password(
     request: ForgotPasswordRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Send password reset email"""
     service = AuthService(db)
     result = await service.forgot_password(email=request.email)
     return result
@@ -66,7 +62,6 @@ async def reset_password(
     request: ResetPasswordRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Reset password with token"""
     service = AuthService(db)
     result = await service.reset_password(
         token=request.token,
@@ -80,7 +75,6 @@ async def refresh_token(
     request: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db)
 ):
-    """Refresh access token"""
     service = AuthService(db)
     tokens = await service.refresh_token(refresh_token=request.refresh_token)
     return tokens
@@ -88,5 +82,4 @@ async def refresh_token(
 
 @router.post("/logout", response_model=dict)
 async def logout():
-    """Logout user (client should discard tokens)"""
     return {"message": "Successfully logged out"}

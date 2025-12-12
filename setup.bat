@@ -5,7 +5,6 @@ echo Cortex AI Backend - Автоматическая установка
 echo ================================================
 echo.
 
-:: Проверка Python
 echo [1/5] Проверка Python...
 python --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -17,7 +16,6 @@ if %errorlevel% neq 0 (
 python --version
 echo.
 
-:: Создание виртуального окружения
 echo [2/5] Создание виртуального окружения...
 if exist venv (
     echo Виртуальное окружение уже существует
@@ -27,7 +25,6 @@ if exist venv (
 )
 echo.
 
-:: Активация и установка зависимостей
 echo [3/5] Установка зависимостей...
 call venv\Scripts\activate.bat
 pip install --upgrade pip
@@ -40,7 +37,6 @@ if %errorlevel% neq 0 (
 echo [OK] Все зависимости установлены
 echo.
 
-:: Создание .env файла
 echo [4/5] Настройка конфигурации...
 if exist .env (
     echo [OK] Файл .env уже существует
@@ -53,7 +49,6 @@ if exist .env (
 )
 echo.
 
-:: Проверка MySQL
 echo [5/5] Следующие шаги...
 echo.
 echo ================================================

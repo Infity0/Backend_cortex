@@ -19,43 +19,34 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual Environment
 venv/
 env/
 ENV/
 .venv
 
-# IDEs
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Environment variables
 .env
 .env.local
 
-# Database
 *.db
 *.sqlite3
 
-# Uploads
 uploads/*
 !uploads/.gitkeep
 
-# Logs
 *.log
 logs/
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Testing
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Alembic
 alembic/versions/*.pyc

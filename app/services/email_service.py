@@ -4,7 +4,6 @@ from app.core.config import settings
 
 
 class EmailService:
-    """Email service for sending notifications"""
     
     def __init__(self):
         self.smtp_host = settings.SMTP_HOST
@@ -14,18 +13,14 @@ class EmailService:
         self.email_from = settings.EMAIL_FROM
     
     async def send_email(self, to: str, subject: str, body: str):
-        """Send email (mock implementation)"""
-        # In production, use aiosmtplib to send real emails
         print(f"[EMAIL] To: {to}")
         print(f"[EMAIL] Subject: {subject}")
         print(f"[EMAIL] Body: {body}")
         print("-" * 50)
         
-        # Mock delay
         await asyncio.sleep(0.1)
     
     async def send_verification_email(self, email: str, code: str):
-        """Send email verification code"""
         subject = "Verify your Cortex AI account"
         body = f"""
         Welcome to Cortex AI!
@@ -39,7 +34,6 @@ class EmailService:
         await self.send_email(email, subject, body)
     
     async def send_password_reset_email(self, email: str, token: str):
-        """Send password reset email"""
         reset_link = f"http://localhost:3000/reset-password?token={token}"
         subject = "Reset your Cortex AI password"
         body = f"""
@@ -55,7 +49,6 @@ class EmailService:
         await self.send_email(email, subject, body)
     
     async def send_subscription_email(self, email: str, plan_name: str, success: bool):
-        """Send subscription notification"""
         if success:
             subject = f"Welcome to {plan_name}!"
             body = f"""
@@ -77,7 +70,6 @@ class EmailService:
         await self.send_email(email, subject, body)
     
     async def send_low_balance_notification(self, email: str, balance: int):
-        """Send low token balance notification"""
         subject = "Low Token Balance"
         body = f"""
         Your token balance is running low: {balance} tokens remaining.

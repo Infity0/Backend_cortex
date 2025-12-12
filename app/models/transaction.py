@@ -5,7 +5,6 @@ from app.core.database import Base
 
 
 class Transaction(Base):
-    """Transactions/Payments model"""
     __tablename__ = "TRANSACTIONS"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -15,9 +14,7 @@ class Transaction(Base):
     payment_method = Column(String(50), nullable=True)
     date = Column(DateTime, server_default=func.now())
     
-    # Payment status
-    status = Column(String(20), default='pending')  # pending, succeeded, failed
+    status = Column(String(20), default='pending')
     
-    # Relationships
     user = relationship("User", back_populates="transactions")
     subscription = relationship("Subscription", back_populates="transactions")

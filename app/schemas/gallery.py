@@ -4,7 +4,6 @@ from datetime import datetime
 
 
 class ImageResponse(BaseModel):
-    """Image response schema"""
     id: int
     image_url: str
     thumbnail_url: Optional[str]
@@ -18,7 +17,6 @@ class ImageResponse(BaseModel):
 
 
 class GallerySearchRequest(BaseModel):
-    """Gallery search request"""
     query: Optional[str] = None
     style: Optional[str] = None
     favorites_only: bool = False

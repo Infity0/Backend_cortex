@@ -8,9 +8,7 @@ from app.services.token_service import TokenService
 
 
 class GenerateService:
-    """Image generation service"""
     
-    # Token costs
     TOKEN_COSTS = {
         'colorization': 25,
         'style': 100,
@@ -24,18 +22,15 @@ class GenerateService:
         self.token_service = TokenService(db)
     
     async def create_generation(self, user_id: int, prompt: str, style: str, request_type: str):
-        """Create new generation request"""
-        # Validate style
+
         if style not in self.ALLOWED_STYLES:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Invalid style. Allowed: {', '.join(self.ALLOWED_STYLES)}"
             )
         
-        # Get token cost
         tokens_cost = self.TOKEN_COSTS.get(request_type, 350)
         
-        # Check and deduct tokens
         success = await self.token_service.deduct_tokens(user_id, tokens_cost)
         if not success:
             raise HTTPException(
@@ -43,7 +38,6 @@ class GenerateService:
                 detail="Insufficient tokens"
             )
         
-        # Create request
         new_request = Request(
             User_id=user_id,
             request_type=request_type,
@@ -58,8 +52,6 @@ class GenerateService:
         await self.db.commit()
         await self.db.refresh(new_request)
         
-        # In production, this would be sent to a queue for processing
-        # For now, we'll just mark it as processing
         new_request.status = 'processing'
         await self.db.commit()
         
@@ -71,7 +63,6 @@ class GenerateService:
         }
     
     async def get_status(self, generation_id: int, user_id: int):
-        """Get generation status"""
         result = await self.db.execute(
             select(Request).where(
                 Request.id == generation_id,
@@ -86,7 +77,6 @@ class GenerateService:
                 detail="Generation request not found"
             )
         
-        # Get associated image if completed
         image_url = None
         thumbnail_url = None
         if request.status == 'completed':
@@ -111,7 +101,6 @@ class GenerateService:
         }
     
     async def delete_generation(self, generation_id: int, user_id: int):
-        """Delete generation request"""
         result = await self.db.execute(
             select(Request).where(
                 Request.id == generation_id,
@@ -126,7 +115,6 @@ class GenerateService:
                 detail="Generation request not found"
             )
         
-        # Refund tokens if failed or pending
         if request.status in ['failed', 'pending']:
             await self.token_service.refund_tokens(user_id, request.tokens_used)
         
@@ -136,7 +124,6 @@ class GenerateService:
         return {"message": "Generation deleted successfully"}
     
     async def get_history(self, user_id: int) -> List[dict]:
-        """Get generation history"""
         result = await self.db.execute(
             select(Request)
             .where(Request.User_id == user_id)
@@ -147,7 +134,6 @@ class GenerateService:
         
         history = []
         for req in requests:
-            # Get image URL if exists
             image_url = None
             if req.status == 'completed':
                 img_result = await self.db.execute(
