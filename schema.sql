@@ -1,7 +1,3 @@
--- SQL-скрипт для создания структуры БД проекта Cortex AI (MySQL)
--- Создан на основе ERD диаграммы проекта
-
--- Таблица пользователей
 CREATE TABLE User (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -10,7 +6,6 @@ CREATE TABLE User (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     token_balance INT DEFAULT 0,
     is_active BOOLEAN DEFAULT TRUE,
-    -- Дополнительные поля для функционала
     email_verified BOOLEAN DEFAULT FALSE,
     verification_code VARCHAR(6),
     verification_code_expires DATETIME,
@@ -21,7 +16,7 @@ CREATE TABLE User (
     INDEX idx_id (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Таблица планов подписки
+
 CREATE TABLE SUBSCRIPTION_PLANS (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
@@ -33,7 +28,6 @@ CREATE TABLE SUBSCRIPTION_PLANS (
     INDEX idx_id (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Таблица подписок пользователей
 CREATE TABLE SUBSCRIPTIONS (
     id INT AUTO_INCREMENT PRIMARY KEY,
     User_id INT NOT NULL,
@@ -49,7 +43,6 @@ CREATE TABLE SUBSCRIPTIONS (
     FOREIGN KEY (SUBSCRIPTION_PLANS_id) REFERENCES SUBSCRIPTION_PLANS(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Таблица транзакций/платежей
 CREATE TABLE TRANSACTIONS (
     id INT AUTO_INCREMENT PRIMARY KEY,
     User_id INT NOT NULL,
@@ -64,7 +57,6 @@ CREATE TABLE TRANSACTIONS (
     FOREIGN KEY (SUBSCRIPTIONS_id) REFERENCES SUBSCRIPTIONS(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Таблица запросов на генерацию
 CREATE TABLE REQUESTS (
     id INT AUTO_INCREMENT PRIMARY KEY,
     User_id INT NOT NULL,
@@ -83,7 +75,6 @@ CREATE TABLE REQUESTS (
     FOREIGN KEY (User_id) REFERENCES User(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Таблица изображений
 CREATE TABLE IMAGES (
     id INT AUTO_INCREMENT PRIMARY KEY,
     User_id INT NOT NULL,
@@ -99,7 +90,6 @@ CREATE TABLE IMAGES (
     FOREIGN KEY (REQUESTS_id) REFERENCES REQUESTS(id) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Вставка начальных планов подписки
 INSERT INTO SUBSCRIPTION_PLANS (name, price, tokens_included, duration_days, description, note) VALUES
 ('Sirdar', 0.00, 1000, 3, 'Trial plan', 'Free 3-day trial with 1000 tokens'),
 ('Expert', 1500.00, 24000, 30, 'Advanced plan', '1500 RUB/month with 24000 tokens'),

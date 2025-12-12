@@ -5,7 +5,6 @@ from app.core.database import Base
 
 
 class Request(Base):
-    """Image generation requests model"""
     __tablename__ = "REQUESTS"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)

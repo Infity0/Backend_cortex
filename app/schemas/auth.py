@@ -3,7 +3,6 @@ from typing import Optional
 
 
 class RegisterRequest(BaseModel):
-    """Registration request schema"""
     email: EmailStr
     password: str
     username: Optional[str] = None
@@ -24,34 +23,28 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    """Login request schema"""
     email: EmailStr
     password: str
 
 
 class TokenResponse(BaseModel):
-    """Token response schema"""
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
 
 
 class VerifyEmailRequest(BaseModel):
-    """Email verification request"""
     code: str = Field(..., min_length=6, max_length=6)
 
 
 class ForgotPasswordRequest(BaseModel):
-    """Forgot password request"""
     email: EmailStr
 
 
 class ResetPasswordRequest(BaseModel):
-    """Reset password request"""
     token: str
     new_password: str = Field(..., min_length=8)
 
 
 class RefreshTokenRequest(BaseModel):
-    """Refresh token request"""
     refresh_token: str

@@ -15,7 +15,6 @@ async def get_token_balance(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get user token balance"""
     service = TokenService(db)
     balance = await service.get_balance(user_id=current_user.id)
     return balance
@@ -26,7 +25,6 @@ async def get_token_history(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get token usage history"""
     service = TokenService(db)
     history = await service.get_history(user_id=current_user.id)
     return history

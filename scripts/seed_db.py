@@ -9,9 +9,7 @@ from app.models.subscription import SubscriptionPlan
 
 
 async def seed_subscription_plans():
-    """Seed subscription plans"""
     async with async_session_maker() as session:
-        # Check if plans already exist
         from sqlalchemy import select
         result = await session.execute(select(SubscriptionPlan))
         existing = result.scalars().first()
@@ -54,7 +52,6 @@ async def seed_subscription_plans():
 
 
 async def main():
-    """Main seed function"""
     print("Seeding database...")
     await seed_subscription_plans()
     print("✓ Database seeded successfully!")

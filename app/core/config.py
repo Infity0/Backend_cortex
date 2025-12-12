@@ -3,7 +3,6 @@ from typing import List
 
 
 class Settings(BaseSettings):
-    """Application settings"""
     
     # Application
     APP_NAME: str = "Cortex AI"

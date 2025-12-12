@@ -13,7 +13,6 @@ async def get_user_stats(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get user statistics"""
     service = GalleryService(db)
     stats = await service.get_user_stats(user_id=current_user.id)
     return stats

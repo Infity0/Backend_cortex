@@ -15,7 +15,6 @@ router = APIRouter()
 
 @router.get("/plans", response_model=List[SubscriptionPlanResponse])
 async def get_plans(db: AsyncSession = Depends(get_db)):
-    """Get all available subscription plans"""
     service = SubscriptionService(db)
     plans = await service.get_all_plans()
     return plans
@@ -26,7 +25,6 @@ async def get_current_subscription(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get current user subscription"""
     service = SubscriptionService(db)
     subscription = await service.get_current_subscription(user_id=current_user.id)
     return subscription
@@ -38,7 +36,6 @@ async def subscribe(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Subscribe to a plan"""
     service = SubscriptionService(db)
     result = await service.create_subscription(
         user_id=current_user.id,
@@ -54,7 +51,6 @@ async def cancel_subscription(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Cancel current subscription"""
     service = SubscriptionService(db)
     result = await service.cancel_subscription(
         user_id=current_user.id,

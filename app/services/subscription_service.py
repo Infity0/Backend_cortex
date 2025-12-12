@@ -9,19 +9,17 @@ from app.models.transaction import Transaction
 
 
 class SubscriptionService:
-    """Subscription service"""
+
     
     def __init__(self, db: AsyncSession):
         self.db = db
     
     async def get_all_plans(self) -> List[SubscriptionPlan]:
-        """Get all subscription plans"""
         result = await self.db.execute(select(SubscriptionPlan))
         plans = result.scalars().all()
         return list(plans)
     
     async def get_current_subscription(self, user_id: int):
-        """Get current active subscription"""
         result = await self.db.execute(
             select(Subscription, SubscriptionPlan, User)
             .join(SubscriptionPlan, Subscription.SUBSCRIPTION_PLANS_id == SubscriptionPlan.id)
@@ -55,8 +53,6 @@ class SubscriptionService:
         }
     
     async def create_subscription(self, user_id: int, plan_id: int, payment_method: str):
-        """Create new subscription"""
-        # Get plan
         result = await self.db.execute(select(SubscriptionPlan).where(SubscriptionPlan.id == plan_id))
         plan = result.scalar_one_or_none()
         
@@ -66,7 +62,6 @@ class SubscriptionService:
                 detail="Subscription plan not found"
             )
         
-        # Get user
         result = await self.db.execute(select(User).where(User.id == user_id))
         user = result.scalar_one_or_none()
         
@@ -76,7 +71,6 @@ class SubscriptionService:
                 detail="User not found"
             )
         
-        # Check for existing active subscription
         result = await self.db.execute(
             select(Subscription).where(
                 Subscription.User_id == user_id,
@@ -91,8 +85,7 @@ class SubscriptionService:
                 status_code=status.HTTP_409_CONFLICT,
                 detail="User already has an active subscription"
             )
-        
-        # Create subscription
+
         start_date = datetime.utcnow()
         end_date = start_date + timedelta(days=plan.duration_days)
         
@@ -107,8 +100,7 @@ class SubscriptionService:
         
         self.db.add(new_subscription)
         await self.db.flush()
-        
-        # Create transaction (mock payment)
+
         transaction = Transaction(
             User_id=user_id,
             SUBSCRIPTIONS_id=new_subscription.id,
@@ -118,8 +110,7 @@ class SubscriptionService:
         )
         
         self.db.add(transaction)
-        
-        # Update user tokens
+
         user.token_balance = plan.tokens_included
         
         await self.db.commit()
@@ -131,7 +122,6 @@ class SubscriptionService:
         }
     
     async def cancel_subscription(self, user_id: int, reason: Optional[str] = None):
-        """Cancel subscription"""
         result = await self.db.execute(
             select(Subscription).where(
                 Subscription.User_id == user_id,
@@ -145,8 +135,7 @@ class SubscriptionService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="No active subscription found"
             )
-        
-        # Disable auto-renewal
+
         subscription.auto_renew = 0
         subscription.status = 'cancelled'
         

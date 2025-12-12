@@ -9,8 +9,6 @@ from typing import Sequence, Union
 from alembic import op
 import sqlalchemy as sa
 
-
-# revision identifiers, used by Alembic.
 revision: str = '001'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
@@ -54,7 +52,6 @@ def upgrade() -> None:
     )
     op.create_index('ix_SUBSCRIPTION_PLANS_id', 'SUBSCRIPTION_PLANS', ['id'])
 
-    # Create SUBSCRIPTIONS table
     op.create_table(
         'SUBSCRIPTIONS',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -71,7 +68,6 @@ def upgrade() -> None:
     )
     op.create_index('ix_SUBSCRIPTIONS_id', 'SUBSCRIPTIONS', ['id'])
 
-    # Create TRANSACTIONS table
     op.create_table(
         'TRANSACTIONS',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -87,7 +83,6 @@ def upgrade() -> None:
     )
     op.create_index('ix_TRANSACTIONS_id', 'TRANSACTIONS', ['id'])
 
-    # Create REQUESTS table
     op.create_table(
         'REQUESTS',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -106,7 +101,6 @@ def upgrade() -> None:
     )
     op.create_index('ix_REQUESTS_id', 'REQUESTS', ['id'])
 
-    # Create IMAGES table
     op.create_table(
         'IMAGES',
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -122,7 +116,6 @@ def upgrade() -> None:
     )
     op.create_index('ix_IMAGES_id', 'IMAGES', ['id'])
 
-    # Insert default subscription plans
     op.execute("""
         INSERT INTO SUBSCRIPTION_PLANS (name, price, tokens_included, duration_days, description, note)
         VALUES 

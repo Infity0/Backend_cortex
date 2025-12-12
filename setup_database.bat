@@ -8,14 +8,12 @@ echo.
 echo Этот скрипт поможет настроить базу данных
 echo.
 
-:: Запрос пароля MySQL
 set /p MYSQL_PASSWORD="Введите пароль root для MySQL: "
 echo.
 
 echo [1/2] Создание базы данных...
 echo.
 
-:: Создание базы данных
 mysql -u root -p%MYSQL_PASSWORD% -e "CREATE DATABASE IF NOT EXISTS cortex_ai CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>nul
 
 if %errorlevel% neq 0 (

@@ -14,7 +14,6 @@ async def get_profile(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get current user profile"""
     return current_user
 
 
@@ -24,7 +23,6 @@ async def update_profile(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Update user profile"""
     service = UserService(db)
     updated_user = await service.update_profile(
         user_id=current_user.id,
@@ -39,7 +37,6 @@ async def upload_avatar(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Upload user avatar"""
     service = UserService(db)
     result = await service.upload_avatar(
         user_id=current_user.id,
@@ -54,7 +51,6 @@ async def change_password(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Change user password"""
     service = UserService(db)
     result = await service.change_password(
         user_id=current_user.id,
@@ -69,7 +65,6 @@ async def delete_account(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Delete user account"""
     service = UserService(db)
     result = await service.delete_account(user_id=current_user.id)
     return result

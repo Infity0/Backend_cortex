@@ -5,7 +5,6 @@ from app.core.database import Base
 
 
 class SubscriptionPlan(Base):
-    """Subscription plans model"""
     __tablename__ = "SUBSCRIPTION_PLANS"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -16,12 +15,10 @@ class SubscriptionPlan(Base):
     description = Column(String(255), nullable=True)
     note = Column(String(255), nullable=True)
     
-    # Relationships
     subscriptions = relationship("Subscription", back_populates="plan")
 
 
 class Subscription(Base):
-    """User subscriptions model"""
     __tablename__ = "SUBSCRIPTIONS"
     
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
@@ -32,10 +29,8 @@ class Subscription(Base):
     status = Column(Enum('active', 'inactive', 'cancelled', name='subscription_status'), default='active')
     created_at = Column(DateTime, server_default=func.now())
     
-    # Auto-renewal
-    auto_renew = Column(Integer, default=1)  # 1 = True, 0 = False (MySQL compatibility)
+    auto_renew = Column(Integer, default=1)
     
-    # Relationships
     user = relationship("User", back_populates="subscriptions")
     plan = relationship("SubscriptionPlan", back_populates="subscriptions")
     transactions = relationship("Transaction", back_populates="subscription")

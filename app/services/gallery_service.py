@@ -7,13 +7,11 @@ from app.models.request import Request
 
 
 class GalleryService:
-    """Gallery service"""
     
     def __init__(self, db: AsyncSession):
         self.db = db
     
     async def get_gallery(self, user_id: int, limit: int = 20, offset: int = 0) -> List[dict]:
-        """Get user gallery"""
         result = await self.db.execute(
             select(Image, Request)
             .join(Request, Image.REQUESTS_id == Request.id)
@@ -39,7 +37,6 @@ class GalleryService:
         return gallery
     
     async def get_favorites(self, user_id: int) -> List[dict]:
-        """Get favorite images"""
         result = await self.db.execute(
             select(Image, Request)
             .join(Request, Image.REQUESTS_id == Request.id)
@@ -66,7 +63,6 @@ class GalleryService:
         return favorites
     
     async def add_to_favorites(self, image_id: int, user_id: int):
-        """Add image to favorites"""
         result = await self.db.execute(
             select(Image).where(
                 Image.id == image_id,
@@ -108,7 +104,6 @@ class GalleryService:
         return {"message": "Removed from favorites"}
     
     async def delete_image(self, image_id: int, user_id: int):
-        """Delete image"""
         result = await self.db.execute(
             select(Image).where(
                 Image.id == image_id,
@@ -129,7 +124,6 @@ class GalleryService:
         return {"message": "Image deleted successfully"}
     
     async def search(self, user_id: int, query: Optional[str] = None, style: Optional[str] = None) -> List[dict]:
-        """Search in gallery"""
         conditions = [Image.User_id == user_id]
         
         if query:
@@ -162,22 +156,18 @@ class GalleryService:
         return results
     
     async def get_user_stats(self, user_id: int):
-        """Get user statistics"""
-        # Total generations
         result = await self.db.execute(
             select(func.count(Request.id))
             .where(Request.User_id == user_id, Request.status == 'completed')
         )
         total_generations = result.scalar() or 0
         
-        # Total tokens used
         result = await self.db.execute(
             select(func.sum(Request.tokens_used))
             .where(Request.User_id == user_id, Request.status == 'completed')
         )
         total_tokens_used = result.scalar() or 0
         
-        # Style distribution
         result = await self.db.execute(
             select(Request.style, func.count(Request.id))
             .where(Request.User_id == user_id, Request.status == 'completed')
@@ -185,7 +175,6 @@ class GalleryService:
         )
         style_distribution = {row[0]: row[1] for row in result.all() if row[0]}
         
-        # Favorite style
         favorite_style = max(style_distribution.items(), key=lambda x: x[1])[0] if style_distribution else None
         
         return {
