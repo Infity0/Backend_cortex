@@ -17,7 +17,6 @@ async def get_gallery(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get user gallery images"""
     service = GalleryService(db)
     images = await service.get_gallery(
         user_id=current_user.id,
@@ -32,7 +31,6 @@ async def get_favorites(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get favorite images"""
     service = GalleryService(db)
     favorites = await service.get_favorites(user_id=current_user.id)
     return favorites
@@ -44,7 +42,6 @@ async def add_to_favorites(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Add image to favorites"""
     service = GalleryService(db)
     result = await service.add_to_favorites(
         image_id=image_id,
@@ -59,7 +56,6 @@ async def remove_from_favorites(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Remove image from favorites"""
     service = GalleryService(db)
     result = await service.remove_from_favorites(
         image_id=image_id,
@@ -74,7 +70,6 @@ async def delete_image(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Delete image"""
     service = GalleryService(db)
     result = await service.delete_image(
         image_id=image_id,
@@ -90,7 +85,6 @@ async def search_gallery(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Search in gallery"""
     service = GalleryService(db)
     results = await service.search(
         user_id=current_user.id,
