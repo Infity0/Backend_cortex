@@ -18,7 +18,6 @@ async def create_generation(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Create new image generation request"""
     service = GenerateService(db)
     result = await service.create_generation(
         user_id=current_user.id,
@@ -35,7 +34,6 @@ async def get_generation_status(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get generation status"""
     service = GenerateService(db)
     status = await service.get_status(
         generation_id=generation_id,
@@ -50,7 +48,6 @@ async def delete_generation(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Delete generation"""
     service = GenerateService(db)
     result = await service.delete_generation(
         generation_id=generation_id,
@@ -64,7 +61,6 @@ async def get_generation_history(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Get generation history"""
     service = GenerateService(db)
     history = await service.get_history(user_id=current_user.id)
     return history
